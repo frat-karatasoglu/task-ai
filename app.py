@@ -128,8 +128,9 @@ else:
 with st.sidebar:
     st.markdown("### О режиме работы")
     st.markdown(
-        "Ключ читается из `ANTHROPIC_API_KEY` (env / `.env` / `st.secrets`), "
-        "никогда не хардкодится.\n\n"
+        "Ключ читается из `GEMINI_API_KEY` (env / `.env` / `st.secrets`), "
+        "никогда не хардкодится. Бесплатный ключ: "
+        "[aistudio.google.com/apikey](https://aistudio.google.com/apikey).\n\n"
         "Если ключ не задан — для 4 тестовых транскриптов показывается заранее "
         "подготовленный эталонный результат (демо-режим), UI при этом остаётся рабочим."
     )
