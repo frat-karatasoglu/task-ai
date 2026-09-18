@@ -123,6 +123,33 @@ streamlit run app.py
 транскриптов вместо live-вызова покажет заранее подготовленный эталонный
 результат с явной пометкой демо-режима.
 
+### Деплой на Streamlit Community Cloud
+
+Vercel для Streamlit не подходит технически (serverless-модель Vercel не
+держит постоянный процесс с WebSocket, который нужен Streamlit) — вместо
+этого используется официальная бесплатная платформа для Streamlit-приложений.
+Код к этому уже готов (`_get_api_key()` в `extractor.py` читает ключ из
+`st.secrets`, если его нет в env), нужны только действия в веб-интерфейсе:
+
+1. Зайти на [share.streamlit.io](https://share.streamlit.io), войти через
+   GitHub.
+2. "New app" → репозиторий `frat-karatasoglu/task-ai`, branch `main`, main
+   file path `app.py`.
+3. В "Advanced settings" → Python version: выбрать `3.11` или `3.12` (в
+   выпадающем списке; код не использует ничего специфичного для 3.13).
+4. Там же в поле "Secrets" вставить (в формате `.streamlit/secrets.toml`,
+   пример — в `.streamlit/secrets.toml.example`):
+   ```toml
+   GEMINI_API_KEY = "..."
+   GEMINI_MODEL = "gemini-2.5-flash"
+   ```
+5. "Deploy". Через 1–2 минуты приложение доступно по публичной ссылке вида
+   `https://<app-name>.streamlit.app`.
+
+Секреты живут только в настройках Streamlit Cloud и в локальном
+`.env`/`.streamlit/secrets.toml` — оба файла в `.gitignore`, в репозиторий
+не попадают.
+
 ## 7. Что было проверено
 
 - Ожидаемый результат по всем 4 транскриптам определён вручную ДО
