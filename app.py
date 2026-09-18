@@ -44,6 +44,12 @@ else:
 
 analyze_clicked = st.button("Анализировать", type="primary")
 
+# Ключ текущего ввода: результат показывается, только если он относится именно
+# к выбранному сейчас транскрипту (иначе на экране остаётся анализ предыдущего).
+current_key = (
+    f"sample-{selected_sample['id']}" if selected_sample is not None else f"custom-{hash(transcript_text)}"
+)
+
 if analyze_clicked:
     if not transcript_text.strip():
         st.warning("Вставьте текст транскрипта.")
@@ -69,8 +75,9 @@ if analyze_clicked:
         if result is not None:
             st.session_state["last_result"] = result.model_dump()
             st.session_state["used_fallback"] = used_fallback
+            st.session_state["result_key"] = current_key
 
-if "last_result" in st.session_state:
+if "last_result" in st.session_state and st.session_state.get("result_key") == current_key:
     result = CaseAnalysis.model_validate(st.session_state["last_result"])
     if st.session_state.get("used_fallback"):
         st.warning("Показан эталонный (заранее подготовленный) результат, не live-вызов LLM.", icon="⚠️")
